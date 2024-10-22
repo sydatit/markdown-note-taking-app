@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 from uuid import UUID
+from typing import List
+from language_tool_python import Match
 
 class NoteBase(BaseModel):
-    title: str
+    title: str | None = None
     content: str
-    author_id: UUID
+    author_id: UUID | None = None
 
 class NoteCreate(NoteBase):
     pass
@@ -21,3 +23,13 @@ class UserResponse(UserBase):
 
     class Config:
         from_attributes = True
+
+class Mistake(BaseModel):
+    message: str
+    offset: int
+    suggestionsToFix: List[str]
+
+class GrammarResponse(BaseModel):
+    suggestion: str
+    numberOfMistakes: int
+    mistakes: List[Mistake] | None = None
